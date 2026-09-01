@@ -1,0 +1,161 @@
+:root {
+  color-scheme: light;
+  --background: #f5f7f4;
+  --surface: #ffffff;
+  --text: #18231d;
+  --muted: #5e6b63;
+  --border: #dbe3dd;
+  --accent: #176b45;
+  --accent-soft: #e5f3eb;
+  --shadow: 0 18px 45px rgba(29, 55, 40, 0.08);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP",
+    "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+a { color: var(--accent); }
+a:hover { text-decoration-thickness: 2px; }
+
+.site-header {
+  border-bottom: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.94);
+}
+
+.header-inner,
+.page,
+.site-footer {
+  width: min(100% - 32px, 920px);
+  margin-inline: auto;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 64px;
+  gap: 24px;
+}
+
+.brand {
+  color: var(--text);
+  font-size: 1.05rem;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.language-link {
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+
+.page { padding-block: 48px 72px; }
+
+.content {
+  padding: clamp(24px, 6vw, 56px);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.content h1,
+.content h2,
+.content h3 { line-height: 1.35; }
+
+.content h1 {
+  margin-top: 0;
+  font-size: clamp(1.9rem, 5vw, 2.8rem);
+  letter-spacing: -0.025em;
+}
+
+.content h2 {
+  margin: 44px 0 12px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  font-size: 1.35rem;
+}
+
+.content h3 {
+  margin: 28px 0 8px;
+  font-size: 1.1rem;
+}
+
+.content li + li { margin-top: 5px; }
+
+.content pre {
+  display: inline-block;
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 9px;
+  background: var(--accent-soft);
+  white-space: pre-wrap;
+}
+
+.content code {
+  color: var(--text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-weight: 650;
+}
+
+.home { padding: clamp(32px, 7vw, 72px); }
+
+.home h1 {
+  font-size: clamp(2rem, 7vw, 3.4rem);
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--accent);
+  font-weight: 750;
+  letter-spacing: 0.04em;
+}
+
+.app-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.app-card {
+  display: block;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--accent-soft);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.app-card strong,
+.app-card span { display: block; }
+
+.app-card span {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.site-footer {
+  padding-block: 24px 40px;
+  color: var(--muted);
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+@media (max-width: 560px) {
+  .header-inner { min-height: 56px; }
+  .page { padding-block: 24px 48px; }
+  .content h2 { margin-top: 36px; }
+}
