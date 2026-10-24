@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "ios": {
+    "version": "0.2.0",
+    "storeUrl": "https://apps.apple.com/app/id6797681991"
+  },
+  "android": {
+    "version": "0.2.0",
+    "storeUrl": "https://play.google.com/store/apps/details?id=com.zukanolab.turnclock"
+  }
+}
