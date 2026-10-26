@@ -1,9 +1,5 @@
-<!doctype html>
-<html lang="ja">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>ポン碁</title>
+<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
@@ -78,6 +74,8 @@ svg[hidden] { display: none !important; }
   transition: transform .08s, box-shadow .08s;
 }
 .btn small { font-size: 12px; font-weight: 700; opacity: .78; }
+.btn-wide { grid-column: 1 / -1; flex-direction: row; gap: 12px; }
+.btn-wide small { opacity: .7; }
 .btn-gold { background: linear-gradient(#FFE27F, #FFC531); color: #3B2600; box-shadow: 0 5px 0 var(--gold-deep), 0 12px 20px rgba(0, 0, 0, .35); }
 .btn-gold:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--gold-deep), 0 4px 10px rgba(0, 0, 0, .35); }
 .btn-ghost { background: var(--panel-2); box-shadow: 0 5px 0 #1A1F4A, 0 12px 20px rgba(0, 0, 0, .3); }
@@ -156,6 +154,9 @@ svg[hidden] { display: none !important; }
   78% { opacity: 1; }
   100% { transform: translate(-50%, -66%) scale(1); opacity: 0; }
 }
+.pop.epic { top: 24%; font-size: clamp(28px, 8.4vw, 50px); color: #fff; background: linear-gradient(90deg, #FFD04A, #FF8FB8, #8FB4FF, #4FE3B2, #FFD04A); background-size: 300% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; text-shadow: none; filter: drop-shadow(0 4px 0 #7A4300) drop-shadow(0 0 22px rgba(255, 208, 74, .9)); animation: epicpop 2.4s cubic-bezier(.2, 1.3, .3, 1) both, epichue 1.2s linear infinite; }
+@keyframes epicpop { 0% { transform: translate(-50%, -50%) scale(.2) rotate(-10deg); opacity: 0; } 12% { transform: translate(-50%, -50%) scale(1.45) rotate(4deg); opacity: 1; } 24% { transform: translate(-50%, -50%) scale(1.1) rotate(-2deg); } 80% { opacity: 1; transform: translate(-50%, -50%) scale(1.15); } 100% { transform: translate(-50%, -80%) scale(1.15); opacity: 0; } }
+@keyframes epichue { to { background-position: 300% 0; } }
 .pop.pts { font-size: 22px; color: #fff; text-shadow: 0 2px 0 rgba(70, 35, 0, .8), 0 0 12px rgba(255, 208, 74, .95); animation: ptsup 1.1s ease-out both; }
 @keyframes ptsup { 0% { transform: translate(-50%, -30%) scale(.6); opacity: 0; } 15% { opacity: 1; transform: translate(-50%, -60%) scale(1.15); } 100% { transform: translate(-50%, -200%) scale(1); opacity: 0; } }
 .pop.warn { font-size: 20px; color: #fff; background: var(--coral); padding: 1px 14px 3px; border-radius: 999px; box-shadow: 0 3px 0 #A52B38; animation: warn .95s ease-out both; }
@@ -186,6 +187,9 @@ svg[hidden] { display: none !important; }
 .tool.t-hint svg { stroke: var(--mint); }
 .tool[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--mint), 0 4px 0 #161A40; }
 .tool[aria-pressed="true"] svg { stroke: var(--mint); }
+[data-mode="ladder"] .hud { grid-template-columns: minmax(0, 1fr); }
+[data-mode="ladder"] .hud-moves, [data-mode="ladder"] .meter { display: none; }
+[data-mode="ladder"] #goal-label { margin-bottom: 0; }
 [data-mode="rush"] .t-undo, [data-mode="rush"] .t-hint, [data-mode="rush"] .t-retry { display: none; }
 [data-mode="rush"] .tools { grid-template-columns: minmax(0, 140px); justify-content: center; }
 
@@ -222,13 +226,64 @@ svg[hidden] { display: none !important; }
 @media (prefers-reduced-motion: reduce) {
   .h-target, .h-drop, .h-white, .timer.low, .newbest { animation: none; }
   .pop.big, .pop.pts, .pop.warn { animation-duration: .6s; animation-name: fadepop; }
+  .pop.epic { animation-duration: 1.2s; animation-name: fadepop; }
   .board-wrap.flash { animation: none; }
   .card, .modal { animation: none; }
 }
 @keyframes fadepop { 0% { opacity: 0; } 20%, 70% { opacity: 1; } 100% { opacity: 0; } }
+
+/* ---------- 2ページ構成 ---------- */
+.btn[hidden] { display: none !important; }
+a.btn { text-decoration: none; color: inherit; }
+.logo.long { font-size: clamp(28px, 8.6vw, 50px); letter-spacing: .01em; }
+.cta.single { grid-template-columns: minmax(0, 1fr); }
+
+/* ---------- おいかけの基本 ---------- */
+.st-new { transform-box: fill-box; transform-origin: center; animation: stpop .38s cubic-bezier(.2, 1.6, .4, 1) both; }
+.st-gone { transform-box: fill-box; transform-origin: center; animation: stgone .6s ease-out forwards; }
+.st-lib { animation: stlib 1.1s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: center; }
+@keyframes stpop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes stgone { 0% { transform: scale(1); opacity: 1; } 35% { transform: scale(1.35); opacity: 1; } 100% { transform: scale(.2); opacity: 0; } }
+@keyframes stlib { from { transform: scale(.75); opacity: .75; } to { transform: scale(1.1); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .st-new, .st-gone, .st-lib { animation: none; } .st-gone { display: none; } }
+
+.basic-top { display: grid; gap: 12px; }
+.lesson { display: grid; gap: 12px; }
+.lesson p { line-height: 1.75; font-size: 15px; }
+.lesson p + p { margin-top: 8px; }
+.lesson.intro p { font-size: 15px; }
+.l-head { display: flex; align-items: center; gap: 10px; }
+.l-head h2 { font-size: 18px; font-weight: 900; line-height: 1.3; }
+.l-no { flex: none; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 900; font-size: 15px; background: var(--gold); color: #3B2600; }
+.kdot { display: inline-block; width: .7em; height: .7em; border-radius: 50%; margin: 0 .25em 0 .1em; vertical-align: baseline; }
+.kdot.g { background: #128F6E; box-shadow: 0 0 0 2px rgba(79, 227, 178, .35); }
+.kdot.r { background: var(--coral); box-shadow: 0 0 0 2px rgba(255, 92, 108, .35); }
+.demo { display: grid; gap: 10px; }
+.demo-bwrap { width: min(100%, 360px); margin: 0 auto; border-radius: 12px; box-shadow: 0 8px 20px rgba(0, 0, 0, .4); cursor: pointer; line-height: 0; }
+.demo-board { width: 100%; height: auto; display: block; border-radius: 12px; }
+.demo-cap { background: var(--panel-2); border-radius: 14px; padding: 10px 14px; font-weight: 700; font-size: 14px; line-height: 1.6; min-height: 3.6em; display: flex; align-items: center; }
+.demo-cap.ok { box-shadow: inset 0 0 0 2px var(--mint); }
+.demo-cap.ng { box-shadow: inset 0 0 0 2px var(--coral); }
+.demo-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; }
+.demo-dots { display: flex; gap: 5px; width: 100%; justify-content: center; flex-wrap: wrap; }
+.demo-dots:has(i:only-child) { display: none; }
+.demo-dots i { width: 8px; height: 8px; border-radius: 50%; background: #323873; }
+.demo-dots i.done { background: #6B72C4; }
+.demo-dots i.on { background: var(--gold); transform: scale(1.3); }
+.demo-b { min-height: 44px; padding: 0 16px; border-radius: 14px; background: var(--panel-2); font-weight: 900; font-size: 14px; box-shadow: 0 3px 0 #1A1F4A; }
+.demo-b:active { transform: translateY(2px); box-shadow: 0 1px 0 #1A1F4A; }
+.demo-b:disabled { opacity: .35; }
+.demo-next { background: linear-gradient(#FFE27F, #FFC531); color: #3B2600; box-shadow: 0 3px 0 var(--gold-deep); }
+.tips { padding-left: 1.3em; display: grid; gap: 8px; line-height: 1.7; font-size: 15px; }
+.tips li::marker { color: var(--gold); font-weight: 900; }
+.lesson .btn { margin-top: 6px; }
+
+.lv-head { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; margin-top: 10px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.1); }
+.lv-head:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.lv-head b { font-family: var(--f-display); font-weight: 400; font-size: 13px; letter-spacing: .1em; color: var(--gold); }
+.lv-head strong { font-size: 16px; font-weight: 900; }
+.lv-head span { flex-basis: 100%; font-size: 12px; font-weight: 700; opacity: .65; }
 </style>
-</head>
-<body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.4l2.95 6.2 6.75.85-4.98 4.7 1.3 6.7L12 17.5l-6.02 3.35 1.3-6.7-4.98-4.7 6.75-.85z"/></symbol>
 </svg>
@@ -256,6 +311,7 @@ svg[hidden] { display: none !important; }
     <div class="cta">
       <button id="btn-play" class="btn btn-gold" type="button">あそぶ<small id="play-sub">ステージ 1 から</small></button>
       <button id="btn-rush" class="btn btn-ghost" type="button">ラッシュ<small id="rush-best">60秒でどこまで</small></button>
+      <a id="cross" class="btn btn-ghost btn-wide" href="../oikake/" hidden>おいかけっ碁<small>白を追いかけて取る・別ページ</small></a>
     </div>
 
     <section class="panel how">
@@ -265,7 +321,7 @@ svg[hidden] { display: none !important; }
         <li>息を黒石でぜんぶふさぎます。</li>
         <li>ふさぎ切ると石が取れます。少ない手数で取るほど星が増えます。</li>
       </ol>
-      <p class="note">この入門版では、黒石は取られません。</p>
+      <p class="note">黒石は取られません。気楽に置いていこう。</p>
     </section>
 
     <section>
@@ -323,6 +379,7 @@ svg[hidden] { display: none !important; }
 
 <div id="modal" class="modal" hidden><div id="card" class="card" role="dialog" aria-modal="true"></div></div>
 <canvas id="confetti"></canvas>
+<script>window.PONGO_PAGE='pongo';</script>
 <script>
 /* ポン碁 ロジック: 盤面・捕獲・ソルバー・ステージ生成（ブラウザとNodeの両方で動く） */
 (function (root) {
@@ -354,6 +411,19 @@ svg[hidden] { display: none !important; }
   }
 
   /* start を含む白の連と、その息（空点）を返す */
+  /* 黒石のつながり全体の息の数 */
+  function blackLibs(N, board, start) {
+    var seen = new Set([start]), stack = [start], libs = new Set();
+    while (stack.length) {
+      var p = stack.pop(), nb = neighbors(N, p);
+      for (var k = 0; k < nb.length; k++) {
+        var q = nb[k];
+        if (board[q] === BLACK) { if (!seen.has(q)) { seen.add(q); stack.push(q); } }
+        else if (board[q] === EMPTY) libs.add(q);
+      }
+    }
+    return libs.size;
+  }
   function groupAt(N, board, start) {
     var stones = [], libs = new Set(), seen = new Set([start]), stack = [start];
     while (stack.length) {
@@ -525,7 +595,7 @@ svg[hidden] { display: none !important; }
 
       var an = analyze(N, board);
       var L = an.cand.length;
-      if (L < 1 || L > maxCand) continue;
+      if (L < 1 || L > maxCand || (P.minCand && L < P.minCand)) continue;
       var W = an.totalStones;
       var target, par, limit;
       if (P.mode === 'all') {
@@ -538,7 +608,7 @@ svg[hidden] { display: none !important; }
         target = bc.bestAt[M];
         if (target >= W || target <= 0) continue;
         par = firstK(bc.bestAt, target);
-        if (par < 2) continue;
+        if (par < 2 || (P.parMin && par < P.parMin)) continue;
         limit = par + P.slack;
       }
       return {
@@ -577,6 +647,23 @@ svg[hidden] { display: none !important; }
     { N: 9, mode: 'optimal', groups: [6, 7], size: [1, 4], libs: [1, 3], shared: 0.55, decoys: 8, slack: 0, deficit: [3, 4], maxCand: 18 }
   ];
 
+  /* ステージ17〜50：少しずつ盤と白石を増やす。6面に1回は「ぜんぶ取る」で息をつける */
+  (function () {
+    for (var k = 0; k < 34; k++) {
+      var t = k / 33;
+      if (k % 6 === 5) {
+        GEN.push({ N: 9, mode: 'all', groups: [4, 5], size: [1, 3], libs: [1, 2], shared: 0.5, decoys: 6, slack: 1, maxCand: 14 });
+        continue;
+      }
+      var N = k < 10 ? 9 : 11, gLo = Math.min(N === 9 ? 8 : 12, 7 + Math.floor(t * 5));
+      GEN.push({
+        N: N, mode: 'optimal', groups: [gLo, gLo + 1], size: [1, t < 0.4 ? 3 : 4], libs: [1, 3], shared: 0.5,
+        decoys: 8 + Math.floor(t * 3), slack: 0, deficit: [3 + Math.floor(t * 2), 4 + Math.floor(t * 2)], maxCand: 18 + Math.floor(t * 2),
+        minCand: 13 + Math.floor(t * 4), parMin: 9 + Math.floor(t * 5)
+      });
+    }
+  })();
+
   var STAGE_COUNT = HAND.length + GEN.length;
 
   function fromRows(rows) {
@@ -588,6 +675,35 @@ svg[hidden] { display: none !important; }
       }
     });
     return { N: N, cells: cells };
+  }
+
+  /* 息のない黒石（まわりを白と盤のはしにかこまれた石）は置けない形なので、別の場所に移して数値を計算し直す。
+     ほかのステージの盤は変えない。 */
+  function repairStage(s, seed) {
+    var N = s.N, NN = N * N, board = Uint8Array.from(s.cells), rnd = mulberry32(seed * 31 + 12345), moved = 0;
+    for (var guard = 0; guard < 20; guard++) {
+      var deadAt = -1;
+      for (var di = 0; di < NN && deadAt < 0; di++) if (board[di] === BLACK && blackLibs(N, board, di) === 0) deadAt = di;
+      if (deadAt < 0) break;
+      board[deadAt] = EMPTY; moved++;
+      for (var mv = 0; mv < 300; mv++) {
+        var np = Math.floor(rnd() * NN);
+        if (board[np] !== EMPTY || np === deadAt) continue;
+        var nbs = neighbors(N, np);
+        if (nbs.some(function (q) { return board[q] === WHITE; })) continue;
+        if (!nbs.some(function (q) { return board[q] === EMPTY; })) continue;
+        board[np] = BLACK; break;
+      }
+    }
+    if (!moved) return s;
+    var an = analyze(N, board), W = an.totalStones, slack = s.limit - s.par, target, par;
+    if (s.mode === 'all') { target = W; par = an.cand.length; }
+    else {
+      var bc = bestByCount(an); par = s.par; target = bc.bestAt[par];
+      if (target >= W || target <= 0) return s;
+    }
+    s.cells = Array.from(board); s.target = target; s.par = par; s.limit = par + slack; s.total = W; s.libsTotal = an.cand.length;
+    return s;
   }
 
   function buildStage(i) {
@@ -604,7 +720,7 @@ svg[hidden] { display: none !important; }
     for (var j = 0; j < 80; j++) {
       var s = generate(P, 7919 * (i + 1) + j * 131);
       if (s) {
-        s.index = i;
+        s.index = i; repairStage(s, 7919 * (i + 1) + j * 131);
         s.caption = s.mode === 'all'
           ? 'ぜんぶ取るのが目標です。息を共有している場所を探すと、手数が減ります。'
           : '手数が足りません。取れる石が多くなる場所を選びましょう。';
@@ -641,7 +757,7 @@ svg[hidden] { display: none !important; }
       var P = rushParams(lv);
       for (var j = 0; j < 40; j++) {
         var s = generate(P, seed + j * 977);
-        if (s) { s.level = n + 1; s.caption = 'レベル ' + (n + 1) + '。ぜんぶ取るたびに+3秒。'; return s; }
+        if (s) { repairStage(s, seed + j * 977); s.level = n + 1; s.caption = 'レベル ' + (n + 1) + '。ぜんぶ取るたびに+3秒。'; return s; }
       }
     }
     throw new Error('rush generation failed');
@@ -661,16 +777,33 @@ svg[hidden] { display: none !important; }
 (function () {
   'use strict';
   var Lg = window.PongoLogic;
+  var Ld = window.PongoLadder;
+  var PAGE = window.PONGO_PAGE || 'pongo';   // 'pongo' = ポン碁 / 'oikake' = おいかけっ碁
+  var KEY = PAGE === 'oikake' ? 'oikake-v1' : 'pongo-v1';
   var EMPTY = 0, BLACK = 1, WHITE = 2;
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var reduceMotion = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
   var PCOL = ['#FFFFFF', '#FFD04A', '#FF8FB8', '#4FE3B2', '#8FB4FF'];
   var fmt = function (n) { return Math.round(n).toLocaleString('ja-JP'); };
 
+  /* ---------- 計測（GoatCounter）。公開先のドメインでだけ読み込む ---------- */
+  (function () {
+    try {
+      if (location.hostname !== 'zukanolab.github.io') return;
+      var s = document.createElement('script');
+      s.async = true; s.setAttribute('data-goatcounter', 'https://zukanolab.goatcounter.com/count'); s.src = 'https://gc.zgo.at/count.js';
+      document.head.appendChild(s);
+    } catch (e) { /* 計測できなくても遊べる */ }
+  })();
+  function track(name) {
+    try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: name, title: name, event: true }); } catch (e) { /* 無視 */ }
+  }
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
+
   /* ---------- 保存 ---------- */
-  var save = { stars: {}, bestScore: {}, rush: 0, mute: false, guide: true, rushGuide: false };
-  try { var raw = localStorage.getItem('pongo-v1'); if (raw) Object.assign(save, JSON.parse(raw)); } catch (e) { /* 保存できない環境では記録なしで動く */ }
-  function persist() { try { localStorage.setItem('pongo-v1', JSON.stringify(save)); } catch (e) { /* 無視 */ } }
+  var save = { stars: {}, bestScore: {}, rush: 0, mute: false, guide: true, rushGuide: false, lad2: {}, ladGuide: true };
+  try { var raw = localStorage.getItem(KEY); if (raw) Object.assign(save, JSON.parse(raw)); } catch (e) { /* 保存できない環境では記録なしで動く */ }
+  function persist() { try { localStorage.setItem(KEY, JSON.stringify(save)); } catch (e) { /* 無視 */ } }
 
   /* ---------- サウンド ---------- */
   var Sfx = (function () {
@@ -711,14 +844,15 @@ svg[hidden] { display: none !important; }
     return {
       unlock: ensure,
       place: function () { var j = 1 + Math.random() * 0.1; noise(0, 0.05, 0.55, 2600); tone(320 * j, 0, 0.09, 'sine', 0.38, 130 * j); },
-      capture: function (i, combo) {
-        var k = Math.min(SCALE.length - 1, combo - 1 + i), f = hz(SCALE[k]), t = i * 0.07;
+      capture: function (i, combo, step, delay) {
+        var k = Math.min(SCALE.length - 1, combo - 1 + i), f = hz(SCALE[k]), t = (delay || 0) + i * (step == null ? 0.07 : step);
         tone(f, t, 0.38, 'triangle', 0.3); tone(f * 2, t, 0.2, 'sine', 0.12); noise(t, 0.1, 0.4, 4200);
       },
       atari: function () { tone(740, 0, 0.12, 'triangle', 0.2); tone(988, 0.09, 0.18, 'triangle', 0.22); },
       invalid: function () { tone(170, 0, 0.12, 'square', 0.07, 110); },
       hint: function () { tone(1046, 0, 0.1, 'sine', 0.16); tone(1318, 0.08, 0.18, 'sine', 0.16); },
       undo: function () { tone(520, 0, 0.1, 'sine', 0.16, 340); },
+      whiteStep: function () { noise(0, 0.04, 0.4, 3400); tone(250, 0, 0.08, 'sine', 0.22, 140); },
       win: function () { [0, 4, 7, 12, 16].forEach(function (s, i) { tone(hz(s), i * 0.09, 0.55, 'triangle', 0.26); }); },
       clear: function () { [7, 12, 16, 19].forEach(function (s, i) { tone(hz(s), i * 0.06, 0.3, 'triangle', 0.22); }); },
       star: function (i) { var s = [7, 12, 16][i] || 16; tone(hz(s), 0, 0.5, 'triangle', 0.3); tone(hz(s + 12), 0, 0.3, 'sine', 0.14); noise(0, 0.12, 0.3, 6000); },
@@ -729,16 +863,18 @@ svg[hidden] { display: none !important; }
   })();
 
   /* 息ガイドはモード別。キャンペーンは初期ON、ラッシュは初期OFF */
-  function guideOn() { return G.mode === 'rush' ? save.rushGuide : save.guide; }
+  function guideOn() { return G.mode === 'rush' ? save.rushGuide : G.mode === 'ladder' ? save.ladGuide : save.guide; }
 
   /* ---------- 状態 ---------- */
   var G = {
-    mode: 'campaign', idx: 0, stage: null, N: 5, board: new Uint8Array(25), groups: [],
+    mode: PAGE === 'oikake' ? 'ladder' : 'campaign', idx: 0, stage: null, N: 5, board: new Uint8Array(25), groups: [],
     used: 0, captured: 0, score: 0, combo: 0, history: [], over: false, won: false, locked: false,
-    hint: -1, hintUntil: 0, hover: -1, timer: 0
+    hint: -1, hintUntil: 0, hover: -1, timer: 0,
+    lad: null, lidx: 0, hints: 0, undos: 0
   };
   var R = { running: false, endAt: 0, solved: 0, streak: 0, token: 0, lastSec: -1 };
   var dispScore = 0;
+  function resetScoreView() { dispScore = 0; var el = document.getElementById('score'); if (el) el.textContent = '0'; }
   var fx = { born: new Map(), wobble: new Map(), pops: [], parts: [], rings: [], shake: 0 };
   var stageCache = [];
   function getStage(i) { if (!stageCache[i]) stageCache[i] = Lg.buildStage(i); return stageCache[i]; }
@@ -809,6 +945,7 @@ svg[hidden] { display: none !important; }
     // 息ガイド
     if (guideOn()) {
       G.groups.forEach(function (g) {
+        if (G.mode === 'ladder' && !g.isTarget) return;
         var atari = g.libs.length === 1;
         g.libs.forEach(function (l) {
           var p = pt(l);
@@ -843,7 +980,12 @@ svg[hidden] { display: none !important; }
 
     // アタリの輪とバッジ
     G.groups.forEach(function (g) {
+      if (G.mode === 'ladder' && !g.isTarget) return;
       var n = g.libs.length;
+      if (G.mode === 'ladder') {
+        cx.strokeStyle = 'rgba(255,208,74,.95)'; cx.lineWidth = 2.5;
+        g.stones.forEach(function (s) { var q = pt(s); ringPath(q.x, q.y, r * 1.2); });
+      }
       if (n === 1) {
         cx.strokeStyle = 'rgba(255,92,108,' + (0.55 + 0.45 * pulse) + ')'; cx.lineWidth = 2.5;
         g.stones.forEach(function (s) { var q = pt(s); ringPath(q.x, q.y, r * (1.08 + 0.05 * pulse)); });
@@ -876,9 +1018,9 @@ svg[hidden] { display: none !important; }
     for (i = fx.pops.length - 1; i >= 0; i--) {
       var pp = fx.pops[i], tt = (now - pp.t0) / 380;
       if (tt >= 1) { fx.pops.splice(i, 1); continue; }
-      if (tt < 0) { stone(pp.x, pp.y, r, true, 1, 1); continue; }
+      if (tt < 0) { stone(pp.x, pp.y, r, pp.white !== false, 1, 1); continue; }
       cx.fillStyle = 'rgba(255,255,255,' + (0.55 * (1 - tt)) + ')'; circle(pp.x, pp.y, r * (1.2 + 1.3 * tt));
-      stone(pp.x, pp.y, r, true, 1 + 0.55 * tt, 1 - tt);
+      stone(pp.x, pp.y, r, pp.white !== false, 1 + 0.55 * tt, 1 - tt);
     }
 
     // 波紋
@@ -956,6 +1098,24 @@ svg[hidden] { display: none !important; }
     el.addEventListener('animationend', function () { el.remove(); });
     setTimeout(function () { el.remove(); }, 2000);
   }
+  /* 一気に15個以上取ったときの特別演出 */
+  var EPIC_MIN = 15;
+  function epic(n, x, y, now, label) {
+    popText(label, 'big epic');
+    var k, c = geo.cell;
+    var cols = ['#FFD04A', '#FFFFFF', '#FF8FB8', '#4FE3B2', '#8FB4FF'];
+    for (k = 0; k < 5; k++) fx.rings.push({ x: x, y: y, t0: now + k * 130, dur: 800 + k * 90, maxR: c * (4 + k * 1.3), lw: 9 - k, color: cols[k % cols.length] });
+    var cnt = reduceMotion ? 10 : 90;
+    for (k = 0; k < cnt; k++) {
+      var ang = (k / cnt) * Math.PI * 2 + Math.random() * 0.2, sp = 260 + Math.random() * 520;
+      fx.parts.push({ x: x, y: y, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp - 60, g: 380, age: 0, life: 0.9 + Math.random() * 0.8,
+        size: 3 + Math.random() * 6, color: cols[(Math.random() * cols.length) | 0], shape: Math.random() < 0.5 ? 1 : 0, rot: Math.random() * 6, vr: (Math.random() - 0.5) * 20 });
+    }
+    confettiBurst(160);
+    setTimeout(function () { confettiBurst(110); flash(); }, 420);
+    setTimeout(function () { confettiBurst(80); }, 900);
+    fx.shake = Math.max(fx.shake, 26); flash(); vibrate([30, 40, 30, 40, 60, 40, 90]);
+  }
   var toastEl = null, toastT = 0;
   function toast(msg) {
     if (!toastEl) { toastEl = document.createElement('div'); toastEl.className = 'toast'; wrap.appendChild(toastEl); }
@@ -1002,14 +1162,16 @@ svg[hidden] { display: none !important; }
   }
 
   /* ---------- 画面切り替え ---------- */
-  var screens = { home: $('#home'), play: $('#play') };
+  var screens = { home: $('#home'), play: $('#play'), basic: $('#basic') };
   function show(name) {
-    for (var k in screens) screens[k].hidden = (k !== name);
+    for (var k in screens) if (screens[k]) screens[k].hidden = (k !== name);
     window.scrollTo(0, 0);
+    if (window.OikakeBasic) window.OikakeBasic.stop();
     if (name === 'play') requestAnimationFrame(resize); else renderHome();
   }
   function nextStage() { for (var i = 0; i < Lg.STAGE_COUNT; i++) if (!save.stars[i]) return i; return 0; }
-  function renderHome() {
+  function renderHome() { if (PAGE === 'oikake') renderOikakeHome(); else renderPongoHome(); }
+  function renderPongoHome() {
     var next = nextStage(), total = 0, h = '';
     for (var i = 0; i < Lg.STAGE_COUNT; i++) {
       var s = save.stars[i] || 0; total += s;
@@ -1022,11 +1184,29 @@ svg[hidden] { display: none !important; }
     $('#play-sub').textContent = 'ステージ ' + (next + 1) + ' から';
     $('#rush-best').textContent = save.rush ? 'ハイスコア ' + fmt(save.rush) : '60秒でどこまで';
   }
+  function renderOikakeHome() {
+    var lh = '', lt = 0, ln = Ld.stageCount(), lnext = nextLadder();
+    var LD = window.PongoLadderData || [], LV = window.PongoLadderLevels || [], curLv = 0;
+    for (var j = 0; j < ln; j++) {
+      var ls = save.lad2[j] || 0; lt += ls;
+      if (LD[j] && LD[j].lv && LD[j].lv !== curLv) {
+        curLv = LD[j].lv; var lvi = LV[curLv - 1] || {};
+        lh += '<div class="lv-head"><b>' + (lvi.n || '') + '</b><strong>' + (lvi.t || '') + '</strong><span>' + (lvi.d || '') + '</span></div>';
+      }
+      lh += '<button class="tile' + (j === lnext ? ' next' : '') + '" type="button" data-l="' + j + '" aria-label="問題' + (j + 1) + ' 星' + ls + '"><b>' + (j + 1) + '</b><span class="stars">';
+      for (var m = 1; m <= 3; m++) lh += '<svg class="' + (m <= ls ? 'on' : '') + '"><use href="#i-star"/></svg>';
+      lh += '</span></button>';
+    }
+    $('#grid-ladder').innerHTML = lh;
+    $('#star-total-ladder').textContent = lt + ' / ' + ln * 3;
+    $('#play-sub').textContent = '問題 ' + (lnext + 1) + ' から';
+    var bg = $('#basic-go small'); if (bg) bg.textContent = '問題 ' + (lnext + 1) + ' から';
+  }
 
   /* ---------- キャンペーン ---------- */
   function startStage(i) {
     stopRush(); closeModal();
-    G.mode = 'campaign'; G.idx = i; G.score = 0; dispScore = 0; G.locked = false;
+    G.mode = 'campaign'; G.idx = i; G.score = 0; resetScoreView(); G.locked = false;
     $('#play').dataset.mode = 'campaign';
     $('#play-title').textContent = 'ステージ ' + (i + 1);
     loadBoard(getStage(i));
@@ -1053,6 +1233,7 @@ svg[hidden] { display: none !important; }
   }
 
   function place(p) {
+    if (G.mode === 'ladder') return ladderPlace(p);
     if (G.over || G.locked) return;
     var now = performance.now(), N = G.N;
     if (G.board[p] !== EMPTY) {
@@ -1099,7 +1280,7 @@ svg[hidden] { display: none !important; }
       G.score += pts;
       fx.rings.push({ x: sx, y: sy, t0: now, dur: 650, maxR: geo.cell * 3.2, lw: 8, color: '#FFD04A' });
       fx.shake = Math.max(fx.shake, Math.min(16, 5 + stonesN * 2.5)); flash(); vibrate([20, 30, 20]);
-      popText(bigWord(caps.length, stonesN, G.combo), 'big');
+      if (stonesN >= EPIC_MIN) epic(stonesN, sx, sy, now, stonesN + '子取り!!!'); else popText(bigWord(caps.length, stonesN, G.combo), 'big');
       popText('+' + fmt(pts), 'pts', sx, sy);
     }
 
@@ -1125,6 +1306,7 @@ svg[hidden] { display: none !important; }
   }
 
   function undo() {
+    if (G.mode === 'ladder') return ladderUndo();
     if (G.mode !== 'campaign' || !G.history.length || G.won) return;
     clearTimeout(G.timer); closeModal();
     var h = G.history.pop();
@@ -1135,11 +1317,13 @@ svg[hidden] { display: none !important; }
   }
 
   function retry() {
+    if (G.mode === 'ladder') return startLadder(G.lidx);
     if (G.mode !== 'campaign') return;
-    closeModal(); G.score = 0; dispScore = 0; loadBoard(G.stage);
+    closeModal(); G.score = 0; resetScoreView(); loadBoard(G.stage);
   }
 
   function doHint() {
+    if (G.mode === 'ladder') return ladderHint();
     if (G.mode !== 'campaign' || G.over) return;
     var an = Lg.analyze(G.N, G.board);
     var sol = Lg.solveFor(an, G.stage.target - G.captured, G.stage.limit - G.used);
@@ -1160,6 +1344,7 @@ svg[hidden] { display: none !important; }
     var st = G.stage, used = G.used;
     var stars = used <= st.par ? 3 : used <= st.par + 1 ? 2 : 1;
     G.score += Math.max(0, st.limit - used) * 200;
+    track('pongo/stage-' + pad2(G.idx + 1) + '-clear');
     if (stars > (save.stars[G.idx] || 0)) save.stars[G.idx] = stars;
     if ((save.bestScore[G.idx] || 0) < G.score) save.bestScore[G.idx] = G.score;
     persist();
@@ -1171,6 +1356,7 @@ svg[hidden] { display: none !important; }
       '<div class="resline"><span>手数</span><b>' + used + ' / ' + st.limit + '</b></div>' +
       '<div class="resline"><span>スコア</span><b id="res-score">0</b></div><div class="btns">' +
       (last ? '' : '<button class="btn btn-gold" type="button" data-act="next">次のステージ</button>') +
+      (last ? xBtn('ポン碁の全' + Lg.STAGE_COUNT + 'ステージをクリア！星' + (function () { var t = 0; for (var q = 0; q < Lg.STAGE_COUNT; q++) t += save.stars[q] || 0; return t; })() + ' / ' + Lg.STAGE_COUNT * 3 + '個！\n囲碁を知らなくても遊べる、囲んで取るだけのゲームです。', 'ポン碁,囲碁') : '') +
       '<button class="btn btn-ghost" type="button" data-act="retry">もう一回</button>' +
       '<button class="btn btn-ghost" type="button" data-act="home">ステージ一覧</button></div>';
     openModal(html); Sfx.win();
@@ -1191,11 +1377,16 @@ svg[hidden] { display: none !important; }
   }
 
   card.addEventListener('click', function (e) {
+    var xa = e.target.closest && e.target.closest('a[href^="https://x.com/intent"]');
+    if (xa) track(PAGE + '/share-click');
     var b = e.target.closest('[data-act]'); if (!b) return;
     var act = b.getAttribute('data-act');
     if (act === 'next') startStage(G.idx + 1);
     else if (act === 'retry') { if (G.mode === 'rush') startRush(); else retry(); }
     else if (act === 'undo') undo();
+    else if (act === 'lnext') startLadder(G.lidx + 1);
+    else if (act === 'lretry') startLadder(G.lidx);
+    else if (act === 'lundo') ladderUndo();
     else if (act === 'home') goHome();
   });
 
@@ -1208,8 +1399,9 @@ svg[hidden] { display: none !important; }
   }
   function stopRush() { R.running = false; R.token++; }
   function startRush() {
+    track('pongo/rush-start');
     stopRush(); closeModal(); clearTimeout(G.timer);
-    G.mode = 'rush'; G.score = 0; dispScore = 0; R.solved = 0; R.streak = 0; R.lastSec = -1;
+    G.mode = 'rush'; G.score = 0; resetScoreView(); R.solved = 0; R.streak = 0; R.lastSec = -1;
     $('#play').dataset.mode = 'rush'; $('#play-title').textContent = 'ラッシュ';
     $('#timer').textContent = '60.0'; $('#timer').classList.remove('low');
     loadRush(); G.locked = true; syncToggles(); show('play');
@@ -1228,9 +1420,21 @@ svg[hidden] { display: none !important; }
     var token = R.token;
     G.timer = setTimeout(function () { if (token === R.token && R.running) { loadRush(); } }, 750);
   }
+  /* Xの投稿画面を開くリンク（サーバー不要）。文面はここで直せます */
+  var SHARE_URL = PAGE === 'oikake' ? 'https://zukanolab.github.io/oikake/' : 'https://zukanolab.github.io/pongo/';
+  function xHref(text, tags) {
+    return 'https://x.com/intent/post?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(SHARE_URL) + '&hashtags=' + encodeURIComponent(tags);
+  }
+  function xBtn(text, tags) { return '<a class="btn btn-ghost" href="' + xHref(text, tags) + '" target="_blank" rel="noopener noreferrer">Xでシェア</a>'; }
+  function shareHref(solved, score, isBest) {
+    var text = 'ポン碁のラッシュ60秒で' + solved + '問クリア、' + fmt(score) + '点！' + (isBest ? 'ハイスコア更新！' : '') +
+      '\n囲碁を知らなくても遊べる、囲んで取るだけのゲームです。';
+    return 'https://x.com/intent/post?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(SHARE_URL) + '&hashtags=' + encodeURIComponent('ポン碁,囲碁');
+  }
   function endRush() {
     R.running = false; G.over = true; G.locked = true; clearTimeout(G.timer);
     var isBest = G.score > save.rush; if (isBest) { save.rush = G.score; persist(); }
+    track('pongo/rush-end');
     Sfx.fail();
     setTimeout(function () {
       if (G.mode !== 'rush') return;
@@ -1239,6 +1443,7 @@ svg[hidden] { display: none !important; }
         '<div class="resline"><span>スコア</span><b id="res-score">0</b></div>' +
         '<div class="resline"><span>ハイスコア</span><b>' + fmt(save.rush) + '</b></div><div class="btns">' +
         '<button class="btn btn-gold" type="button" data-act="retry">もう一回</button>' +
+        (R.solved >= 1 ? '<a class="btn btn-ghost" href="' + shareHref(R.solved, G.score, isBest) + '" target="_blank" rel="noopener noreferrer">Xでシェア</a>' : '') +
         '<button class="btn btn-ghost" type="button" data-act="home">ホームへ</button></div>');
       countUp($('#res-score'), G.score, 900);
       if (isBest || R.solved >= 5) confettiBurst(isBest ? 140 : 70);
@@ -1256,6 +1461,203 @@ svg[hidden] { display: none !important; }
     if (left <= 0) endRush();
   }
 
+
+  /* ---------- シチョウ（追いかけ）モード ---------- */
+  function nextLadder() { for (var i = 0; i < Ld.stageCount(); i++) if (!save.lad2[i]) return i; return 0; }
+  function cloneLad(s) { return { N: s.N, board: s.board.slice(), ko: s.ko, t: s.t, chase: s.chase, moves: s.moves }; }
+  function refreshGroups() {
+    G.groups = Lg.whiteGroups(G.N, G.board);
+    if (G.mode === 'ladder' && G.lad) G.groups.forEach(function (g) { g.isTarget = g.stones.indexOf(G.lad.t) >= 0; });
+  }
+  function ladLibs() { return Ld.groupOf(G.N, G.board, G.lad.t).libs.length; }
+  function updateHudLadder(bump) {
+    $('#goal-label').innerHTML = '追いかけ <b>' + G.lad.chase + '</b> 手';
+    var cb = $('#combo');
+    cb.textContent = '白の息 ' + (G.over && G.won ? 0 : ladLibs());
+    if (bump) { cb.classList.remove('bump'); void cb.offsetWidth; cb.classList.add('bump'); }
+    $('#btn-undo').disabled = !G.history.length || G.won;
+  }
+
+  function startLadder(i) {
+    stopRush(); closeModal(); clearTimeout(G.timer);
+    if (i >= Ld.stageCount()) i = 0;
+    var stage = Ld.buildStage(i);
+    G.mode = 'ladder'; G.lidx = i; G.stage = { caption: stage.caption, target: 1, total: 1, limit: 99, par: 1 };
+    G.N = stage.N; G.board = Uint8Array.from(stage.cells); G.lad = Ld.newState(stage); G.ladSol = stage.solution;
+    G.score = 0; resetScoreView(); G.combo = 0; G.history = []; G.over = false; G.won = false; G.locked = false;
+    G.hint = -1; G.hover = -1; G.hints = 0; G.undos = 0; G.wpath = [];
+    fx.born.clear(); fx.wobble.clear(); fx.pops.length = 0; fx.parts.length = 0; fx.rings.length = 0;
+    var now = performance.now(), n = 0;
+    for (var k = 0; k < G.board.length; k++) if (G.board[k]) fx.born.set(k, { t0: now, delay: (n++) * 30 + Math.random() * 60 });
+    $('#play').dataset.mode = 'ladder';
+    var _ld = (window.PongoLadderData || [])[i]; $('#play-title').textContent = (_ld && _ld.lv ? 'レベル' + _ld.lv + ' ・ ' : '') + '問題 ' + (i + 1);
+    $('#caption').textContent = stage.caption;
+    layout(); refreshGroups(); updateHudLadder(false); syncToggles(); show('play');
+  }
+
+  function burst(i, white) {
+    var q = pt(i), count = reduceMotion ? 4 : 16;
+    for (var n = 0; n < count; n++) {
+      var a = Math.random() * Math.PI * 2, sp = 130 + Math.random() * 300;
+      fx.parts.push({
+        x: q.x, y: q.y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 80, g: 520, age: 0,
+        life: 0.5 + Math.random() * 0.5, size: 2.5 + Math.random() * 4.5,
+        color: white ? PCOL[(Math.random() * PCOL.length) | 0] : ['#5A6090', '#8FB4FF', '#FFFFFF'][(Math.random() * 3) | 0],
+        shape: Math.random() < 0.35 ? 1 : 0, rot: Math.random() * 6, vr: (Math.random() - 0.5) * 18
+      });
+    }
+  }
+
+  function ladderPlace(p) {
+    if (G.over || G.locked) return;
+    var now = performance.now(), N = G.N, st = G.lad;
+    if (G.board[p] !== EMPTY) {
+      Sfx.invalid(); var q0 = pt(p);
+      fx.rings.push({ x: q0.x, y: q0.y, t0: now, dur: 300, maxR: geo.r * 0.9, lw: 3, color: '#FF5C6C' });
+      return;
+    }
+    var res = Ld.blackMove(st, p);
+    if (!res.ok) { Sfx.invalid(); toast('そこには打てません（自殺手かコウです）。'); return; }
+    G.history.push({ board: G.board.slice(), lad: cloneLad(st), score: G.score, combo: G.combo, wpath: (G.wpath || []).slice() });
+    G.hint = -1;
+
+    // 黒の一手
+    G.board = res.afterBlack.slice();
+    fx.born.set(p, { t0: now, delay: 0 });
+    var pp = pt(p);
+    fx.rings.push({ x: pp.x, y: pp.y, t0: now, dur: 380, maxR: geo.r * 1.1, lw: 3, color: 'rgba(255,255,255,.85)' });
+    Sfx.place(); vibrate(8);
+
+    if (res.outcome === 'win') {
+      // 標的が取れた: 追いかけた順に、1つずつポンッ。長く追うほど音が高くなっていく
+      var tr = (st.t / N) | 0, tc = st.t % N, wpath = G.wpath || [];
+      var capList = res.whiteCaptured.slice().sort(function (x, y) {
+        var kx = wpath.indexOf(x), ky = wpath.indexOf(y);
+        var vx = kx >= 0 ? 1000 + kx : Math.abs(((x / N) | 0) - tr) + Math.abs(x % N - tc);
+        var vy = ky >= 0 ? 1000 + ky : Math.abs(((y / N) | 0) - tr) + Math.abs(y % N - tc);
+        return vx - vy;
+      });
+      var cn = capList.length, epicOn = cn >= EPIC_MIN;
+      var stepMs = Math.max(28, Math.min(70, 1300 / Math.max(1, cn))), hold = epicOn ? 280 : 0;   /* 15個以上のときだけ、取る直前に一瞬ためる */
+      var order = 0, sx = 0, sy = 0;
+      capList.forEach(function (i) {
+        var q = pt(i); sx += q.x; sy += q.y;
+        fx.pops.push({ x: q.x, y: q.y, t0: now + hold + order * stepMs, white: true });
+        Sfx.capture(order, Math.min(8, st.chase + 1), stepMs / 1000, hold / 1000);
+        (function (ii, o) { setTimeout(function () { if (G.mode === 'ladder') burst(ii, true); }, hold + o * stepMs); })(i, order);
+        order++;
+      });
+      sx /= order; sy /= order;
+      var pts = order * 300 * (st.chase + 1);
+      G.score += pts; G.lad = res.state; G.over = true; G.won = true;
+      var fin = function () {
+        var n2 = performance.now();
+        fx.rings.push({ x: sx, y: sy, t0: n2, dur: 700, maxR: geo.cell * 3.6, lw: 8, color: '#FFD04A' });
+        fx.shake = Math.max(fx.shake, 16); flash(); vibrate([20, 30, 20, 30, 40]);
+        popText('シチョウ成功!', 'big'); popText('+' + fmt(pts), 'pts', sx, sy);
+        if (epicOn) epic(order, sx, sy, n2, order + '子 一網打尽!!');
+      };
+      if (hold) setTimeout(function () { if (G.mode === 'ladder') fin(); }, hold); else fin();
+      refreshGroups(); updateHudLadder(true);
+      G.timer = setTimeout(finishLadder, (epicOn ? 2800 : 1500) + (cn * stepMs > 1000 ? 300 : 0));
+      return;
+    }
+
+    // アタリ表示（白が応手する前の状態）
+    G.locked = true;
+    var tg = Ld.groupOf(N, G.board, st.t);
+    if (tg.libs.length === 1) {
+      var np = pt(st.t); Sfx.atari(); popText('アタリ!', 'warn', np.x, np.y - geo.cell * 0.2);
+    }
+    refreshGroups(); updateHudLadder(false);
+
+    // 白の応手（少し間を置く）
+    G.timer = setTimeout(function () {
+      var t1 = performance.now();
+      G.board = res.board.slice(); G.lad = res.state;
+      if (res.whiteMove >= 0) {
+        (G.wpath || (G.wpath = [])).push(res.whiteMove);
+        var wp = pt(res.whiteMove);
+        fx.born.set(res.whiteMove, { t0: t1, delay: 0 });
+        fx.rings.push({ x: wp.x, y: wp.y, t0: t1, dur: 380, maxR: geo.r * 1.1, lw: 3, color: 'rgba(255,255,255,.7)' });
+        Sfx.whiteStep();
+      }
+      var k = 0;
+      res.blackCaptured.forEach(function (i) {
+        var q = pt(i); fx.pops.push({ x: q.x, y: q.y, t0: t1 + k * 50, white: false }); burst(i, false); k++;
+      });
+      if (k) { popText('取られた!', 'warn', geo.S * 0.5, geo.S * 0.5); fx.shake = Math.max(fx.shake, 8); }
+      refreshGroups();
+      if (res.outcome === 'escaped') {
+        G.over = true; G.locked = false; Sfx.fail(); fx.shake = Math.max(fx.shake, 10);
+        var tp = pt(G.lad.t); fx.rings.push({ x: tp.x, y: tp.y, t0: t1, dur: 600, maxR: geo.cell * 3, lw: 6, color: '#FF5C6C' });
+        updateHudLadder(true);
+        G.timer = setTimeout(showLadderFail, 900);
+        return;
+      }
+      var chase = G.lad.chase, pts2 = 100 * chase; G.score += pts2; G.combo = chase;
+      Sfx.capture(0, Math.min(9, chase));
+      if (res.whiteMove >= 0) { var wq = pt(res.whiteMove); popText('+' + fmt(pts2), 'pts', wq.x, wq.y); }
+      G.locked = false; updateHudLadder(true);
+    }, reduceMotion ? 120 : 430);
+  }
+
+  function ladderUndo() {
+    if (!G.history.length || G.won) return;
+    clearTimeout(G.timer); closeModal();
+    var h = G.history.pop();
+    G.board = h.board; G.lad = h.lad; G.score = h.score; G.combo = h.combo; G.wpath = h.wpath ? h.wpath.slice() : [];
+    G.over = false; G.locked = false; G.hint = -1; fx.pops.length = 0; G.undos++;
+    Sfx.undo(); refreshGroups(); updateHudLadder(false);
+  }
+
+  function ladderHint() {
+    if (G.over || G.locked) return;
+    var h = (G.lad.moves === 0 && G.ladSol && G.ladSol.length) ? G.ladSol[0][0] : Ld.hint(G.lad);
+    if (h < 0) { toast('ここからは取れません。「1手戻す」を使ってみよう。'); Sfx.invalid(); return; }
+    G.hint = h; G.hintUntil = performance.now() + 4500; G.hints++; Sfx.hint();
+  }
+
+  function finishLadder() {
+    var stars = G.hints === 0 && G.undos === 0 ? 3 : G.hints === 0 ? 2 : 1;
+    G.score += 500;
+    track('oikake/problem-' + pad2(G.lidx + 1) + '-clear');
+    if (stars > (save.lad2[G.lidx] || 0)) save.lad2[G.lidx] = stars;
+    persist();
+    var last = G.lidx >= Ld.stageCount() - 1;
+    var LDt = window.PongoLadderData || [], LVt = window.PongoLadderLevels || [], curLv = LDt[G.lidx] && LDt[G.lidx].lv;
+    var lvEnd = !!curLv && (last || !LDt[G.lidx + 1] || LDt[G.lidx + 1].lv !== curLv), shareHtml = '';
+    if (lvEnd) {
+      var lvName = (LVt[curLv - 1] || {}).t || '', lvStars = 0, lvCount = 0;
+      LDt.forEach(function (d, k) { if (d.lv === curLv) { lvCount++; lvStars += save.lad2[k] || 0; } });
+      var allStars = 0; LDt.forEach(function (d, k) { allStars += save.lad2[k] || 0; });
+      var shareText = last ? 'おいかけっ碁の全' + LDt.length + '問をクリア！星 ' + allStars + ' / ' + LDt.length * 3 + '\n白をななめに追いかけて取る、囲碁のパズルです。' : 'おいかけっ碁 レベル' + curLv + '「' + lvName + '」を全部クリア！星 ' + lvStars + ' / ' + lvCount * 3 + '\n白をななめに追いかけて取る、囲碁のパズルです。';
+      shareHtml = xBtn(shareText, 'おいかけっ碁,囲碁');
+    }
+    var title = last ? 'ぜんぶ追いきった!' : stars === 3 ? 'パーフェクト!' : 'シチョウ成功!';
+    var sub = stars === 3 ? 'ヒントも戻しも使わずに追いきりました。' : stars === 2 ? '戻しを使わなければ星3つです。' : 'ヒントなしで追えると星が増えます。';
+    openModal('<h2>' + title + '</h2><div class="bigstars">' + '<svg><use href="#i-star"/></svg>'.repeat(3) + '</div>' +
+      '<p class="sub">' + sub + '</p>' +
+      '<div class="resline"><span>追いかけ</span><b>' + G.lad.chase + ' 手</b></div>' +
+      '<div class="resline"><span>スコア</span><b id="res-score">0</b></div><div class="btns">' +
+      (last ? '' : '<button class="btn btn-gold" type="button" data-act="lnext">次の問題</button>') + shareHtml +
+      '<button class="btn btn-ghost" type="button" data-act="lretry">もう一回</button>' +
+      '<button class="btn btn-ghost" type="button" data-act="home">ホームへ</button></div>');
+    Sfx.win();
+    var svgs = card.querySelectorAll('.bigstars svg');
+    for (var i = 0; i < stars; i++) (function (k) { setTimeout(function () { if (svgs[k]) { svgs[k].classList.add('on'); Sfx.star(k); } }, 380 + k * 380); })(i);
+    countUp($('#res-score'), G.score, 1000);
+    confettiBurst(stars === 3 ? 150 : 80);
+  }
+
+  function showLadderFail() {
+    openModal('<h2>逃げられた!</h2><p class="sub">白の息が3つ以上になりました。ここからは追いかけが続きません。</p>' +
+      '<p class="sub">「ひとつ戻す」で打ち直せます。逃げる先と、盤の石の位置を見てみよう。</p><div class="btns">' +
+      '<button class="btn btn-gold" type="button" data-act="lundo">ひとつ戻す</button>' +
+      '<button class="btn btn-ghost" type="button" data-act="lretry">最初からやり直す</button>' +
+      '<button class="btn btn-ghost" type="button" data-act="home">ホームへ</button></div>');
+  }
+
   /* ---------- フレームループ ---------- */
   var last = performance.now(), scoreEl = $('#score');
   function frame(now) {
@@ -1264,7 +1666,8 @@ svg[hidden] { display: none !important; }
     if (!screens.play.hidden) {
       updateFx(dt); draw(now); tickRush(now);
       if (dispScore !== G.score) {
-        dispScore += Math.max(1, (G.score - dispScore) * Math.min(1, dt * 7));
+        var dd = (G.score - dispScore) * Math.min(1, dt * 7);
+        dispScore += dd >= 0 ? Math.max(1, dd) : Math.min(-1, dd);
         if (Math.abs(G.score - dispScore) < 1.5) dispScore = G.score;
         scoreEl.textContent = fmt(dispScore);
       }
@@ -1286,11 +1689,23 @@ svg[hidden] { display: none !important; }
   cv.addEventListener('pointerleave', function () { G.hover = -1; });
   document.addEventListener('pointerdown', function () { Sfx.unlock(); }, { passive: true });
 
-  $('#grid').addEventListener('click', function (e) {
-    var t = e.target.closest('.tile'); if (t) startStage(parseInt(t.getAttribute('data-i'), 10));
-  });
-  $('#btn-play').addEventListener('click', function () { startStage(nextStage()); });
-  $('#btn-rush').addEventListener('click', startRush);
+  if (PAGE === 'oikake') {
+    $('#grid-ladder').addEventListener('click', function (e) {
+      var t = e.target.closest('.tile'); if (t) startLadder(parseInt(t.getAttribute('data-l'), 10));
+    });
+    $('#btn-play').addEventListener('click', function () { startLadder(nextLadder()); });
+    window.OikakeBasic.renderAll($('#basic-body'));
+    window.OikakeBasic.hero($('.hero-art'));
+    $('#btn-basic').addEventListener('click', function () { track('oikake/basic-open'); show('basic'); });
+    $('#btn-basic-back').addEventListener('click', function () { show('home'); });
+    $('#basic-go').addEventListener('click', function () { startLadder(nextLadder()); });
+  } else {
+    $('#grid').addEventListener('click', function (e) {
+      var t = e.target.closest('.tile'); if (t) startStage(parseInt(t.getAttribute('data-i'), 10));
+    });
+    $('#btn-play').addEventListener('click', function () { startStage(nextStage()); });
+    $('#btn-rush').addEventListener('click', startRush);
+  }
   $('#btn-back').addEventListener('click', goHome);
   $('#btn-undo').addEventListener('click', undo);
   $('#btn-hint').addEventListener('click', doHint);
@@ -1302,13 +1717,12 @@ svg[hidden] { display: none !important; }
   }
   $('#btn-sound').addEventListener('click', function () { save.mute = !save.mute; persist(); syncToggles(); if (!save.mute) Sfx.place(); });
   $('#btn-guide').addEventListener('click', function () {
-    if (G.mode === 'rush') save.rushGuide = !save.rushGuide; else save.guide = !save.guide;
+    if (G.mode === 'rush') save.rushGuide = !save.rushGuide; else if (G.mode === 'ladder') save.ladGuide = !save.ladGuide; else save.guide = !save.guide;
     persist(); syncToggles();
   });
 
+  var cross = $('#cross');
+  if (cross && /github\.io$/.test(location.hostname)) cross.hidden = false;
   syncToggles(); renderHome(); requestAnimationFrame(frame);
 })();
 </script>
-
-</body>
-</html>

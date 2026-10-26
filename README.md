@@ -7,4 +7,4 @@ Official website and privacy policies for ZukanoLab apps.
 - `/kifuclock/privacy/` — KifuClock privacy policy (Japanese)
 - `/kifuclock/privacy/en/` — KifuClock privacy policy (English)
 
-This site does not use analytics, advertising, or cookies.
+Game usage (page views and clicks) is counted with the cookieless analytics service GoatCounter. This site does not use advertising or cookies.
