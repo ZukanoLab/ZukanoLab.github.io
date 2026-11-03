@@ -9,7 +9,7 @@ alternate_url: /kifuclock/privacy/en/
 
 # KifuClock プライバシーポリシー
 
-制定日: 2026年5月26日
+施行日: 2026年11月4日
 
 最終更新日: 2026年11月4日
 

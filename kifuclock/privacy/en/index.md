@@ -9,7 +9,7 @@ alternate_url: /kifuclock/privacy/
 
 # KifuClock Privacy Policy
 
-Effective date: May 26, 2026
+Effective date: November 4, 2026
 
 Last updated: November 4, 2026
 
