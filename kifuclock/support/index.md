@@ -4,6 +4,33 @@ title: KifuClock サポート / Support
 lang: ja
 ---
 
+<style>
+.kifuclock-support-comparison {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  margin: 20px 0;
+}
+.kifuclock-support-comparison th,
+.kifuclock-support-comparison td {
+  border: 1px solid #a8b5ad;
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+.kifuclock-support-comparison thead th {
+  background: #e5f3eb;
+}
+.kifuclock-support-comparison th:first-child { width: 50%; }
+.kifuclock-support-comparison th:nth-child(2) { width: 15%; }
+.kifuclock-support-comparison th:nth-child(3) { width: 35%; }
+@media (max-width: 560px) {
+  .kifuclock-support-comparison th,
+  .kifuclock-support-comparison td { padding: 8px 6px; }
+}
+</style>
+
 [English support](#english-support)
 
 # KifuClock サポート
@@ -28,11 +55,20 @@ KifuClockの使い方や購入についてお困りの場合は、以下をご�
 
 対局時計の基本機能は無料です。
 
-| 機能 | 無料 | 上限を解除する商品 |
-| --- | --- | --- |
-| お気に入りの時間設定 | 2件 | 対局時計Pro |
-| 対局履歴・消費時間グラフの閲覧 | 直近5局 | 対局時計Pro |
-| 囲碁棋譜の保存 | 3局 | 囲碁棋譜Pro |
+<table class="kifuclock-support-comparison">
+  <thead>
+    <tr>
+      <th scope="col">機能</th>
+      <th scope="col">無料</th>
+      <th scope="col">上限を解除する商品</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>お気に入りの時間設定</td><td>2件</td><td>対局時計Pro</td></tr>
+    <tr><td>対局履歴・消費時間グラフの閲覧</td><td>直近5局</td><td>対局時計Pro</td></tr>
+    <tr><td>囲碁棋譜の保存</td><td>3局</td><td>囲碁棋譜Pro</td></tr>
+  </tbody>
+</table>
 
 2つのProはそれぞれ別の買い切り商品です。サブスクリプションではありません。価格はアプリの「Pro機能」画面でご確認ください。
 
